@@ -12,6 +12,6 @@
     "serve": "node bin/website-copier.js --serve"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   }
 }

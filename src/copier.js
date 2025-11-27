@@ -101,13 +101,18 @@ async function downloadAndRewrite(html, baseUrl, outDir) {
 /**
  * 复制指定 URL 的页面到本地目录，并重写资源路径
  */
+/**
+ * 复制指定 URL 的页面到本地目录，支持多页面抓取与进度回调
+ */
 async function copyWebsite(url, outDir, opts = {}) {
   ensureDir(outDir);
   const depth = Math.max(0, opts.depth || 0);
+  const onProgress = typeof opts.onProgress === 'function' ? opts.onProgress : () => {};
   const start = new URL(url);
   const host = start.hostname;
   const visited = new Set();
   const q = [{ url: start.toString(), level: 0 }];
+  onProgress({ type: 'start', url: start.toString(), depth });
 
   while (q.length) {
     const { url: cur, level } = q.shift();
@@ -128,8 +133,10 @@ async function copyWebsite(url, outDir, opts = {}) {
     const { hrefRewrites, nextLinks } = planAnchorRewrites(anchors, start);
     rewritten = applyHrefRewrites(rewritten, hrefRewrites);
     const { filePath } = savePageHtml(cur, rewritten, outDir);
+    onProgress({ type: 'pageSaved', url: cur, filePath, visited: visited.size, queue: q.length });
 
     if (level < depth) {
+      let added = 0;
       for (const link of nextLinks) {
         const abs = resolveUrl(cur, link);
         if (!abs) continue;
@@ -137,12 +144,15 @@ async function copyWebsite(url, outDir, opts = {}) {
         if (u.hostname !== host) continue;
         if (isAssetUrl(u.pathname)) continue;
         q.push({ url: u.toString(), level: level + 1 });
+        added++;
       }
+      if (added > 0) onProgress({ type: 'discover', count: added, total: q.length });
     }
   }
 
   patchNuxtPublicPath(outDir, host);
   patchCssRelativeUrls(outDir);
+  onProgress({ type: 'done', pages: visited.size });
   return { indexPath: path.join(outDir, 'index.html') };
 }
 
