@@ -8,6 +8,27 @@
 - 复制并本地启动预览：
   - `node bin/website-copier.js https://cn.haizol.com/ -o out --serve --port 5173`
 
+## 环境要求
+- 操作系统：`macOS` 或 `Windows 10/11`
+- Node.js：`>=16`（推荐 `18 LTS` 或 `20 LTS`）
+- npm：随 Node.js 安装自动提供
+
+## Node.js 安装与初始化（适合小白）
+- macOS（使用 nvm 管理多版本）
+  - 安装 nvm：`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash`
+  - 重新加载终端配置（zsh）：`source ~/.zshrc`
+  - 安装并使用 LTS：`nvm install 18 && nvm use 18 && nvm alias default 18`
+  - 验证版本：`node -v`（显示 v18.x），`npm -v`
+- Windows（使用 nvm-windows 管理多版本）
+  - 下载并安装：`https://github.com/coreybutler/nvm-windows/releases` 的 `nvm-setup.exe`
+  - 打开 PowerShell 执行：`nvm install 18`、`nvm use 18`
+  - 验证版本：`node -v`（显示 v18.x）、`npm -v`
+
+## 初始化与运行
+- 进入项目目录：`cd website-copier`
+- 确认 Node.js 版本：`node -v`（建议 v18 或 v20）
+- 执行复制或复制并预览，参考“快速开始”与“参数说明”。
+
 ## 参数说明
 - `-o, --out <目录>`：输出目录，默认 `./output`
 - `--serve`：复制完成后启动本地静态服务器
