@@ -1,0 +1,17 @@
+{
+  "name": "website-copier",
+  "version": "0.1.0",
+  "description": "将 HTTP 网页完整复制到本地并可启动的 Node.js CLI 工具",
+  "license": "Apache-2.0",
+  "bin": {
+    "website-copier": "bin/website-copier.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "start": "node bin/website-copier.js",
+    "serve": "node bin/website-copier.js --serve"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
